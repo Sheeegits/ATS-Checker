@@ -6,6 +6,7 @@ import streamlit as st
 from PIL import Image
 import pdf2image
 import google.generativeai as genai
+import subprocess
 
 # Load environment variables
 load_dotenv()
@@ -22,12 +23,27 @@ def get_gemini_response(input_text, pdf_content, prompt):
     except Exception as e:
         raise Exception(f"Error in AI response generation: {e}")
 
+# Function to check if Poppler is installed and accessible
+def check_poppler():
+    try:
+        # Check Poppler installation
+        poppler_path = subprocess.run(["which", "pdfinfo"], capture_output=True, text=True)
+        if poppler_path.returncode == 0:
+            st.write(f"Poppler found at: {poppler_path.stdout.strip()}")
+        else:
+            st.error("Poppler is not installed or not in PATH.")
+    except Exception as e:
+        st.error(f"Error checking Poppler installation: {e}")
+
 # Function to process the uploaded PDF
 def input_pdf_setup(uploaded_file):
     try:
         if uploaded_file is not None:
+            # Check if Poppler is installed
+            check_poppler()
+
             # Convert the PDF to images using the correct Poppler path
-            poppler_path = r'C:\poppler\Library\bin'
+            poppler_path = r'/usr/bin'  # Path for Poppler in the cloud environment
             images = pdf2image.convert_from_bytes(uploaded_file.read(), poppler_path=poppler_path)
 
             # Process the first page
@@ -106,4 +122,4 @@ if submit3:
         except Exception as e:
             st.error(f"An error occurred while processing your resume: {e}")
     else:
-        st.error("Please upload the resume before submitting.") 
+        st.error("Please upload the resume before submitting.")
