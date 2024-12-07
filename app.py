@@ -43,7 +43,7 @@ def input_pdf_setup(uploaded_file):
             check_poppler()
 
             # Convert the PDF to images using the correct Poppler path
-            poppler_path = r'/usr/bin'  # Path for Poppler in the cloud environment
+            poppler_path = r'C:\poppler\Library\bin'  # Path for Poppler in the cloud environment
             images = pdf2image.convert_from_bytes(uploaded_file.read(), poppler_path=poppler_path)
 
             # Process the first page
