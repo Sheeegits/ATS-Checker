@@ -106,4 +106,4 @@ if submit3:
         except Exception as e:
             st.error(f"An error occurred while processing your resume: {e}")
     else:
-        st.error("Please upload the resume before submitting.")
+        st.error("Please upload the resume before submitting.") 
